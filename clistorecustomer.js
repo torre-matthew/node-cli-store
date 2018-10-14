@@ -1,5 +1,6 @@
 let mysql = require("mysql");
 let inquirer = require("inquirer");
+let dbpass = require("./dbpass.js");
 
 let connection = mysql.createConnection({
     host: "localhost",
@@ -8,7 +9,7 @@ let connection = mysql.createConnection({
   
     user: "root",
   
-    password: "Loveless27**",
+    password: dbpass,
     database: "clistore_db"
   });
 
