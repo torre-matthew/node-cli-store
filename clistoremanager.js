@@ -32,7 +32,8 @@ let managerOptions = ()  => {
                 "View Products for Sale",
                 "View Low Inventory",
                 "Add to Inventory",
-                "Add New Product"
+                "Add New Product",
+                "End Session"
             ]
         }
     ]).then(function(answers) {
@@ -47,10 +48,16 @@ let managerOptions = ()  => {
 				break;
 			
 			case "Add to Inventory":
-				viewProductsForSale();
-				console.log('');
 				chooseItem();	
 				console.log('');
+                break;
+                
+            case "Add New Product":
+				newItemName();	
+                break;
+                
+            case "End Session":
+				connection.end();	
 				break;
 			
 			default:
@@ -66,8 +73,9 @@ let viewProductsForSale = () => {
         
         if (err) throw err;
 		
-        console.table(data, ["product_name", "price", "quant_in_stock"]);
+        console.table(data, ["product_name", "item_id", "price", "quant_in_stock"]);
         console.log('');
+        managerOptions();
    });
 
 }
@@ -81,18 +89,21 @@ let viewLowInventory = ()  => {
         else if (data.length === 0) {
             console.log('');
             console.log("Stock is looking good. All items have more than 5 Units avalable.");
+            console.log('');
+            managerOptions();
         }
 
         else {
-            console.table(data, ["product_name", "price", "quant_in_stock"]);
-		console.log('');
+            console.table(data, ["product_name", "item_id", "price", "quant_in_stock"]);
+            console.log('');
+            managerOptions();
         }
    });
     
 }
 
 let addToInventory = (item, amounttoadd)  => {
-	let realItem = parseInt(item) + 1;
+	let realItem = parseInt(item);
 	let query = "select * from products where item_id = " + realItem;
 	
 	connection.query(query, function(err, queryData) {   
@@ -106,11 +117,27 @@ let addToInventory = (item, amounttoadd)  => {
 				connection.query(updateQuery, [{quant_in_stock: newAmount},{item_id: realItem}], function(err, updateData) {   
 				
 					if (err) throw err;
-					
-					console.log(queryData);
+                    console.log('');
+                    console.log('');
+                    console.log("You've successfully updated the following:");
+                    console.log('');
+                    displayUpdatedItem(item);
 				});
 	});	
 
+}
+
+let displayUpdatedItem = (itemId) => {
+    let selectQuery = "select * from products where item_id = " + itemId;
+		
+				connection.query(selectQuery, function(err, selectData) {   
+				
+					if (err) throw err;
+					
+                    console.table(selectData);
+                    console.log('');
+                    managerOptions();
+				});
 }
 
 let chooseItem = () => {
@@ -118,7 +145,7 @@ let chooseItem = () => {
         {
             name: "item",
             type: "input",
-            message: "Choose the item, by index, that you'd like to add more to.",
+            message: "Choose the item, by item_id, that you'd like to add more to.",
         }
     ]).then(function(answers) { 
 			
@@ -138,7 +165,88 @@ let chooseAmountToAdd = (item) => {
     });
 }
 
+let newItemName = () => {
 
-let addNewProduct = ()  => {
+    inquirer.prompt([
+        {
+            name: "itemName",
+            type: "input",
+            message: "Enter item Name",
+        }
+    ]).then(function(answers) { 
+            newItemDep(answers.itemName);
+        
+    });
+}
+
+let newItemDep = (name) => {
+
+    inquirer.prompt([
+        {
+            name: "itemDep",
+            type: "list",
+            message: "What Department?",
+            choices: ["Fruit Tea", "Milk Tea"]
+        }
+    ]).then(function(answers) { 
+            newItemPrice(name, answers.itemDep);
+        
+    });
+}
+
+let newItemPrice = (name, dep) => {
+
+    inquirer.prompt([
+        {
+            name: "itemPrice",
+            type: "input",
+            message: "What's the price of this item? $",
+        }
+    ]).then(function(answers) { 
+            newItemQuant(name, dep, answers.itemPrice);
+        
+    });
+}
+
+let newItemQuant = (name, dep, price) => {
+
+    inquirer.prompt([
+        {
+            name: "itemQuant",
+            type: "input",
+            message: "How Many Units?",
+        }
+    ]).then(function(answers) { 
+            addNewProduct(name, dep, price, answers.itemQuant);
+        
+    });
+}
+
+let addNewProduct = (name, dep, price, quant)  => {
+    console.log(name.split(" ").length);
+    let insertQuery = "insert into products (product_name, dep, price, quant_in_stock ) values ?";
+    let values = [[name, dep, price, quant]];
+    let selectQuery = "select * from products where product_name = " + name;
+    connection.query(insertQuery, [values], function(err, queryData) {   
+        
+        if (name.split(" ").length > 1) {
+            console.log('added item with one or more words');
+            // connection.query(selectQuery, function(err, queryData) {   
+            
+            //     if (err) throw err;
+                
+            //     console.log('');
+            //     console.log("You've successfully added the following:");
+            //     console.table(queryData);
+            //     console.log('');
+            
+            // });
+        }
+        else if (err) {
+            throw err;
+        }
+        
+            
     
+    });
 }
