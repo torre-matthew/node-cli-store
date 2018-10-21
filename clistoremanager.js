@@ -217,36 +217,48 @@ let newItemQuant = (name, dep, price) => {
             message: "How Many Units?",
         }
     ]).then(function(answers) { 
-            addNewProduct(name, dep, price, answers.itemQuant);
+            addNewProduct(name, dep, price, answers.itemQuant)
+            
         
     });
 }
 
 let addNewProduct = (name, dep, price, quant)  => {
-    console.log(name.split(" ").length);
-    let insertQuery = "insert into products (product_name, dep, price, quant_in_stock ) values ?";
-    let values = [[name, dep, price, quant]];
-    let selectQuery = "select * from products where product_name = " + name;
-    connection.query(insertQuery, [values], function(err, queryData) {   
-        
-        if (name.split(" ").length > 1) {
-            console.log('added item with one or more words');
-            // connection.query(selectQuery, function(err, queryData) {   
-            
-            //     if (err) throw err;
-                
-            //     console.log('');
-            //     console.log("You've successfully added the following:");
-            //     console.table(queryData);
-            //     console.log('');
-            
-            // });
-        }
-        else if (err) {
-            throw err;
-        }
-        
-            
     
-    });
+    
+        
+        let insertQuery = "insert into products (product_name, dep, price, quant_in_stock ) values ?";
+        let values = [[name, dep, price, quant]];
+    
+        connection.query(insertQuery, [values], function(err, queryData) {   
+            
+            if (name.split(" ").length >= 1) {
+                console.log('');
+                console.log("You've successfully added " + quant + " units of " + name + " at $" + price + " each");
+                console.log('');
+                managerOptions();
+            }
+            else if (err) {
+                throw err;
+            }     
+        });
+    
 }
+
+let displayAddedItem = (name) => {
+   
+    
+   
+        let selectQuery = "select * from products where product_name = " + name;
+        connection.query(selectQuery, function(err, queryData) {   
+                
+                    if (err) throw err;
+                    
+                    console.log('');
+                    console.log("You've successfully added the following:");
+                    console.table(queryData);
+                    console.log('');
+                
+        });
+    
+}   

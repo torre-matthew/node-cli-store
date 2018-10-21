@@ -130,11 +130,11 @@ let howMany = (itemselected, passedtotal) => {
 // Once the update goes through, show the customer the total cost of their purchase.
 let completeOrder = (currenttotal) => {
     console.log('');
-    console.log("*                                                                               *");
     console.log("");
-    console.log("   This sweet and refreshing order is going to cost you " + "$" + currenttotal + ". Pay me Sucka!!!");
+    console.log("Your total is " + "$" + currenttotal);
+    console.log("Thank you for your business...");
+    console.log("Now, pay me Sucka!!!");
     console.log("");
-    console.log("*                                                                               *");
     connection.end();
 }
 
