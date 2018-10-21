@@ -31,3 +31,7 @@ Write actions updates data is the main sql table being used for this app.
 ------------------ | -------------------- | --------------------
 [MySql](https://www.npmjs.com/package/mysql#connection-options) | [Inquirer](https://github.com/SBoudrias/Inquirer.js) |
 
+
+Known Bug:
+* In the customer experience, when user selects an amount that is greater than what's in stock, the app breaks. Calculated total to that point is lost and total not calculated moving forward.
+
