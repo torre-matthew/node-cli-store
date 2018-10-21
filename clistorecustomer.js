@@ -23,6 +23,8 @@ connection.connect(function(err) {
   });
 
 //   This function will display all of the items available for sale.
+
+let displayInventory = (passedtotal) => {
     connection.query("select * from products", function(err, data) {   
         
              if (err) throw err;
@@ -30,6 +32,7 @@ connection.connect(function(err) {
             chooseItemToPurchase(data, passedtotal);   
         });
 }
+
 
 // Display inventory to user. Have them choose what they'll be purchasing. 
 // In order to keep track of the users running total, I'm passing the passedtotal param from purchaseMore function. 
@@ -148,7 +151,7 @@ let updateDB = (item, current_db_quant, amount_to_purchase) => {
         });
 }
 
-// Tiny function to calculate an initial total.
+// Tiny function to calculate an initial total
 let calcTotal = (price, quantity) => {
     let total = price*quantity;
     return total;
