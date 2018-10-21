@@ -28,7 +28,11 @@ let displayInventory = (passedtotal) => {
     connection.query("select * from products", function(err, data) {   
         
              if (err) throw err;
-
+            console.log('');
+            console.log('');
+            console.log("Here's our menu");
+            console.log('');
+            console.table(data, ["product_name", "price"]);
             chooseItemToPurchase(data, passedtotal);   
         });
 }
@@ -118,6 +122,8 @@ let howMany = (itemselected, passedtotal) => {
                 }
 //Not enough inventory to process order, tell the user and have them either update their order or leave
                 else {
+                    let total = calcTotal(res[0].price, answers.howMany) + passedtotal;
+                    console.log(total);
                     console.log('');
                     console.log("Sorry, we don't have enough inventory to fulfill that order.");
                     console.log('');

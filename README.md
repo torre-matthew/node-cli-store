@@ -9,7 +9,7 @@ The customer experience calculates totals as multiple orders are place as well a
 
 If inventory is too low to fulfill a particular request, the app will let the customer know and ask them to update their order. 
 
-[Customer Experience Example Here]()
+[Customer Experience Example Here](https://drive.google.com/file/d/1FmRsM0IeedUIYxfzHMzzw4KxHZYW828q/view)
 
 #### Manager Experience 
 
@@ -23,7 +23,7 @@ Read actions queries the mysql database and uses javascript console.table() to p
 
 Write actions updates data is the main sql table being used for this app. 
 
-[Manager Experience Example Here]()
+[Manager Experience Example Here](https://drive.google.com/file/d/1gMwsao8laKuk-i1UtXTkykl45DMku-4D/view)
  
 
 ### Technologies Used
